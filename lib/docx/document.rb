@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'docx/containers'
 require 'docx/elements'
 require 'nokogiri'
@@ -24,14 +26,14 @@ module Docx
       @replace = {}
 
       # if path-or_io is string && does not contain a null byte
-      if (path_or_io.instance_of?(String) && !/\u0000/.match?(path_or_io))
-        @zip = Zip::File.open(path_or_io)
-      else
-        @zip = Zip::File.open_buffer(path_or_io)
-      end
+      @zip = if path_or_io.instance_of?(String) && !/\u0000/.match?(path_or_io)
+               Zip::File.open(path_or_io)
+             else
+               Zip::File.open_buffer(path_or_io)
+             end
 
-      document = @zip.find_entry('word/document.xml')
-      document ||= @zip.find_entry('word/document2.xml')
+      doc_name = options[:xml_file] || 'document'
+      document = @zip.find_entry("word/#{doc_name}.xml")
       raise Errno::ENOENT if document.nil?
 
       @document_xml = document.get_input_stream.read
