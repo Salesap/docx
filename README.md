@@ -52,6 +52,19 @@ doc.bookmarks.each_pair do |bookmark_name, bookmark_object|
 end
 ```
 
+If you want to process header or footer of the document, you can define the name of the part you need:
+
+``` ruby
+require 'docx'
+
+# For header processing
+doc = Docx::Document.open('example.docx', part: 'header')
+
+# For footer processing
+doc = Docx::Document.open('example.docx', part: 'footer')
+
+```
+
 Don't have a local file but a buffer? Docx handles those to:
 
 ```ruby

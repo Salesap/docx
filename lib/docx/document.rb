@@ -32,7 +32,7 @@ module Docx
                Zip::File.open_buffer(path_or_io)
              end
 
-      doc_name = options[:xml_file] || 'document'
+      doc_name = options[:part] || 'document'
       document = @zip.find_entry("word/#{doc_name}.xml")
       raise Errno::ENOENT if document.nil?
 
